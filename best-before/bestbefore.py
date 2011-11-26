@@ -1,4 +1,5 @@
 import sys
+import itertools
 from datetime import date
 
 
@@ -15,27 +16,16 @@ def padMD(md):
 # returns int list of [y,m,d]
 def bestDate(input):
     partsStr = input.split('/')
-    pts= sorted(map(int, partsStr), reverse=True)
+    pts= sorted(map(int, partsStr))
     if not isUnsigned(pts):
         return input
-
-    if dateCheck([pts[2], pts[1], pts[0]]):
-        return [pts[2], pts[1], pts[0]]
-    if dateCheck([pts[2], pts[0], pts[1]]):
-        return [pts[2], pts[0], pts[1]]
-
-    if dateCheck([pts[1], pts[2], pts[0]]):
-        return [pts[1], pts[2], pts[0]]
-    if dateCheck([pts[1], pts[0], pts[2]]):
-        return [pts[1], pts[0], pts[2]]
-
-    if dateCheck([pts[0], pts[2], pts[1]]):
-        return [pts[0], pts[2], pts[1]]
-    if dateCheck([pts[0], pts[1], pts[2]]):
-        return [pts[0], pts[1], pts[2]]
-
+        
+    for a in itertools.permutations(pts, 3):
+            b = list(a)
+            if dateCheck(b):
+                return b
+                
     return input
-    
 
 def isUnsigned(arr):
     if arr[0] < 0 or arr[1] < 0 or arr[2] < 0:
